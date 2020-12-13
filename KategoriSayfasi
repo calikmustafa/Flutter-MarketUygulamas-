@@ -1,0 +1,118 @@
+import 'package:flutter/material.dart';
+import 'package:fmarket/urun_detay.dart';
+
+class Kategori extends StatefulWidget {
+  final String kategori;
+
+  const Kategori({Key key, this.kategori}) : super(key: key);
+  @override
+  _KategoriState createState() => _KategoriState();
+}
+
+class _KategoriState extends State<Kategori> {
+  List<Widget> gosterilecekListe;
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.kategori == "Temel Gıda") {
+      gosterilecekListe = <Widget>[
+        urunKarti("Zeytinyağı","23.50 TL","https://cdn.pixabay.com/photo/2014/02/17/17/51/ancient-268427_960_720.jpg",mevcut: true),
+        urunKarti("Süt","3.50 TL","https://cdn.pixabay.com/photo/2017/07/05/15/41/milk-2474993_1280.jpg"),
+        urunKarti("makarna","1.50 TL","https://media.istockphoto.com/photos/variety-of-types-and-shapes-of-italian-pasta-picture-id1160659113",mevcut: true),
+        urunKarti("Tuz Ve Baharat","7.50 TL","https://cdn.pixabay.com/photo/2017/06/06/11/58/salt-and-pepper-2377064_1280.jpg"),
+      ];
+    } else if (widget.kategori == "Şekerleme") {
+      gosterilecekListe = <Widget>[
+        urunKarti("Şeker","3 TL","https://cdn.pixabay.com/photo/2017/01/07/20/40/candy-1961536_1280.jpg"),
+       urunKarti("Dondurma","5.75 TL","https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_1280.jpg",mevcut: true),
+      ];
+    } else if (widget.kategori == "İçecekler") {
+      gosterilecekListe = <Widget>[
+        urunKarti("Şarap","18.75 TL","https://cdn.pixabay.com/photo/2016/10/22/20/34/wine-1761613__340.jpg"),
+        urunKarti("Kahve","1.75 TL","https://cdn.pixabay.com/photo/2017/05/12/08/29/coffee-2306471__340.jpg"),
+        urunKarti("Limon Çayı","5.00 TL","https://cdn.pixabay.com/photo/2015/05/25/14/29/tea-783352__340.jpg",mevcut: true),
+        urunKarti("Soğuk Çay","2.75 TL","https://cdn.pixabay.com/photo/2016/01/19/15/07/cocktails-1149171__340.jpg"),
+      ];
+    } else if (widget.kategori == "Temizlik") {
+      gosterilecekListe = <Widget>[
+        urunKarti("Tuvalet Kağıdı","4.25 TL","https://cdn.pixabay.com/photo/2020/03/27/17/03/shopping-4974313__340.jpg"),
+        urunKarti("Deterjan","180.40 TL","https://cdn.pixabay.com/photo/2014/12/17/16/54/clean-571679__340.jpg"),
+        urunKarti("Sıvı Sabun","3.00 TL","https://cdn.pixabay.com/photo/2020/03/21/18/10/hand-disinfection-4954840__340.jpg",mevcut: true),
+      ];
+    }
+  }
+
+  Widget urunKarti(String isim, String fiyat, String resimYolu,{bool mevcut=false}) {
+    return GestureDetector(//ekran üzerinde yapılan hareketlere tespit eder ınkvele göre bir daha çok widget kabul eder
+    onTap: (){
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>UrunDetay(isim: isim,fiyat: fiyat,resimYolu: resimYolu,mevcut: mevcut,)));//urun detay sayfamıza gitmemizi sağladı 
+    },
+          child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                //gölgelendirme vermek için kullandık
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 4.0, //bulanıklaştırma
+                spreadRadius: 2.0,
+              )
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Hero(
+              tag: resimYolu,
+                          child: Container(
+                width: 120.0,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(resimYolu),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            Text(isim,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[600],
+                )),
+            SizedBox(
+              height: 8.0,
+            ),
+            Text(fiyat,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red[400],
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      //ızgara görünümünde kategorileri listeler
+      crossAxisCount: 2, //2 parçaya bölücez demek her satırda 2 parça demek
+      mainAxisSpacing: 12.0, //boşluk bırakmamızı sağladı
+      crossAxisSpacing:
+          12.0, //yan yana duran elemanlar arasında boşluk bırakmamızı sağladı
+      padding: EdgeInsets.all(10.0),
+      childAspectRatio:
+          1, //en boy oranı anlamına geliyor yani eni boyuna eşit olsun demek
+      children: gosterilecekListe,
+    );
+  }
+}
