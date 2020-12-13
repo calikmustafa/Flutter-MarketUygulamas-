@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:fmarket/kategori.dart';
+
+class Urunler extends StatefulWidget {
+  @override
+  _UrunlerState createState() => _UrunlerState();
+}
+
+class _UrunlerState extends State<Urunler>with SingleTickerProviderStateMixin {//animasyon için kullandık başladığında kronometre çalışır saniyede 60 ile 120 arasında çalışır
+
+  TabController televizyonKontrolcusu;//bunu yapmassan tabbarview çalışmaz
+  @override
+  void initState() {
+    
+    super.initState();
+    televizyonKontrolcusu=TabController(length: 4, vsync:this);//kaç tane kanalın olacağını ve animasyon ilgili bilgileri tanımlamamızı sağlıyor
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TabBar(//içerisinde sekmeler olan çubukdur
+        controller: televizyonKontrolcusu,
+        indicatorColor: Colors.red[400],//seçili kanalın rengini gösterir
+        labelColor: Colors.red[400],//sekmelerdeki yazıları renklendirdik
+        unselectedLabelColor: Colors.grey,//seçilmemiş sekmelerin rengi gri
+        isScrollable: true,//sekmelerin yatay eksende kayabilmesin sağlad
+          tabs:[
+            Tab(child: Text("Temel Gıda",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500),),),
+            Tab(child: Text("Şekerleme",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),),
+            Tab(child: Text("İçecekler",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),),
+            Tab(child: Text("Temizlik",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),),
+          ] 
+          ),
+        Expanded(
+          
+          child: TabBarView(//kaydırılabilir bir widget container içerisine almassan çalışmaz televizyon gibi düşün yani tab barın kanallarını değiştiricez temel gıda şekerleme gibi
+            controller: televizyonKontrolcusu,
+            children:[
+              Kategori(kategori: "Temel Gıda",),
+              Kategori(kategori: "Şekerleme",),
+              Kategori(kategori: "İçecekler",),
+              Kategori(kategori: "Temizlik",),
+            ],
+            ),
+        )
+      ],
+    );
+  }
+}
