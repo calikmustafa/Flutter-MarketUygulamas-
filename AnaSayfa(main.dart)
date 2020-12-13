@@ -1,0 +1,104 @@
+
+import 'package:flutter/material.dart';
+import 'package:fmarket/sepetim.dart';
+import 'package:fmarket/urunler.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Projem',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: Anasayfa());
+  }
+}
+
+class Anasayfa extends StatefulWidget {
+  @override
+  _AnasayfaState createState() => _AnasayfaState();
+}
+
+class _AnasayfaState extends State<Anasayfa> {
+int _aktifIcerikNo=0;
+  List<Widget> _icerikler;
+@override
+  void initState() {//state başlatıcı demek
+    
+    super.initState();
+    _icerikler=[
+    Urunler(),//1.butona tıklandığında gelecek olan sayfa
+    Sepetim(),//2.butona tıklandığında gelecek olan sayfa
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.red[400]),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          "Uçarak Gelsin",
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
+        ),
+      ),
+      body:_icerikler[_aktifIcerikNo], //burda ise alt navigation appBarda Hagni butona basılırsa ona göre sayfa güncellensin istedik
+      drawer: Drawer(//yan da açılan alt alta menümüz
+        child: ListView(
+          padding: EdgeInsets.all(0.0),
+          children: <Widget>[
+            UserAccountsDrawerHeader(//darwer menümüzün başlık kısmı
+              accountName:Text("Mustafa Çalık"),
+              accountEmail:Text("Mustafacalik@gmail.com"),
+              currentAccountPicture: Container(
+                decoration: BoxDecoration(
+                  image:DecorationImage(image:NetworkImage("https://lh3.googleusercontent.com/a-/AOh14GjRi7d1BHOeJJ3-XIPf0koFoKLAR1r2Ga_zbPHG=s32-c"),
+                  fit: BoxFit.cover,
+
+                  
+                  ),
+                  borderRadius: BorderRadius.circular(50.0),
+
+                ),
+              ),
+              decoration: BoxDecoration(color: Colors.red[400]),
+              
+              
+              ),
+              ListTile(title: Text("siparişlerim"),onTap: (){},),
+              ListTile(title: Text("indirimlerim"),onTap: (){},),
+              ListTile(title: Text("ayarlarım"),onTap: (){},),
+              ListTile(title: Text("çıkış yap"),onTap: (){Navigator.pop(context);},),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(//alt app bar çubuğu ve en az iki buton olmalıdır
+      currentIndex: _aktifIcerikNo,//hangi buton seçili ise onu yeşil ile göster dedik
+      selectedItemColor: Colors.red[400],//seçili butonun rengi
+      unselectedItemColor: Colors.grey[600],//seçilmeyen butonun rengi
+        items:[
+          BottomNavigationBarItem(icon:Icon(Icons.home),title:Text("Ürünler")),//1.buton
+          BottomNavigationBarItem(icon:Icon(Icons.shopping_cart),title:Text("Sepetim"))//2.buton
+          
+          ],
+          onTap: (int tiklananButonPozisyonNo){setState(() {//hangi butona basıldığındaki pozisyon numaralarını verir ve on tap int bir değişken zorunlu kılar ve setstate yapma amacı uygulanmasını sağlanmaktır
+            _aktifIcerikNo=tiklananButonPozisyonNo;
+          });},
+        
+        ),
+    );
+    
+  }
+}
